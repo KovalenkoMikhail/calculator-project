@@ -29,7 +29,7 @@ public class ExprCommandExecutor {
      * @throws RuntimeException If the command execution fails or times out unexpectedly.
      */
     public String executeExprCommand(String expression) throws IOException, InterruptedException {
-        ProcessBuilder builder = new ProcessBuilder("sh", "-c", "expr " + expression);
+        ProcessBuilder builder = new ProcessBuilder("sh", "-c", "echo \"scale=4;  " + expression + "\" | bc");
         // builder.redirectErrorStream(true); // NO LONGER REDIRECTING ERROR STREAM
 
         Process process = builder.start();
@@ -57,34 +57,23 @@ public class ExprCommandExecutor {
         String trimmedStdout = stdout.trim();
         String trimmedStderr = stderr.trim();
 
-        // expr exit codes on GNU systems (common behavior):
-        // 0: expression is neither null nor 0 (success)
-        // 1: expression is null or 0 (e.g., "0" result, or empty string for boolean false)
-        // 2: syntax error or other invalid operation (true error)
-
-        if (exitCode == 2) {
-            // True error from expr (syntax error, division by zero, non-integer argument)
-            // The error message is typically in stderr, but sometimes also printed to stdout before exit.
-            String errorMessage = trimmedStderr.isEmpty() ? trimmedStdout : trimmedStderr;
-            throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + errorMessage);
-        } else if (exitCode == 1) {
-            // exit code 1 means "expression is null or 0".
-            // If stdout is "0", it's a valid result.
-            // If stdout is empty, it's typically an error for arithmetic operations.
-            if (trimmedStdout.equals("0")) {
-                return trimmedStdout; // Valid "0" result
-            } else if (trimmedStdout.isEmpty() && !trimmedStderr.isEmpty()) {
-                // If stdout is empty but stderr has a message, it's an error.
-                throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + trimmedStderr);
-            } else if (trimmedStdout.isEmpty()) {
-                 // If both stdout and stderr are empty, but exit code is 1, it's an unexpected scenario for arithmetic.
-                throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": (no output)");
-            }
-            // If stdout is not "0" but not empty, and exit code is 1, it's an unexpected case.
-            // We'll treat it as an error for robustness.
-            throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + trimmedStdout);
+        // Если bc вывел что-то в stderr — это ошибка (parse error, деление на ноль и т.д.)
+        if (!trimmedStderr.isEmpty()) {
+            throw new IllegalArgumentException("BC error: " + trimmedStderr);
         }
-        // For exitCode 0, return stdout.
-        return trimmedStdout;
+
+        // Если результат пустой — это тоже ошибка (например, пустой ввод)
+        if (trimmedStdout.isEmpty()) {
+            throw new IllegalArgumentException("BC error: empty output");
+        }
+
+        // Пробуем привести к double и вернуть с 4 знаками после запятой
+        try {
+            double value = Double.parseDouble(trimmedStdout);
+            return String.format("%.4f", value);
+        } catch (NumberFormatException e) {
+            // Если не число — это ошибка (например, bc не смог посчитать)
+            throw new IllegalArgumentException("BC error: output is not a number: '" + trimmedStdout + "'");
+        }
     }
 }

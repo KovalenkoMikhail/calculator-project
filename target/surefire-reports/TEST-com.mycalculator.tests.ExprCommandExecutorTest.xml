@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.mycalculator.tests.ExprCommandExecutorTest" time="0.313" tests="30" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.mycalculator.tests.ExprCommandExecutorTest" time="0.27" tests="24" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -11,7 +11,7 @@
     <property name="java.vm.specification.version" value="17"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/aqa/calculator-project/target/surefire/surefirebooter13663134172702927065.jar /home/aqa/calculator-project/target/surefire 2025-08-02T19-10-05_939-jvmRun1 surefire4905186947824309705tmp surefire_0522789677807855429tmp"/>
+    <property name="sun.java.command" value="/home/aqa/calculator-project/target/surefire/surefirebooter3169729372062559902.jar /home/aqa/calculator-project/target/surefire 2025-08-02T20-36-53_723-jvmRun1 surefire4308870347733061325tmp surefire_09126879442569808851tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/aqa/calculator-project/target/test-classes:/home/aqa/calculator-project/target/classes:/home/aqa/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.0/junit-jupiter-api-5.10.0.jar:/home/aqa/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/aqa/.m2/repository/org/junit/platform/junit-platform-commons/1.10.0/junit-platform-commons-1.10.0.jar:/home/aqa/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/aqa/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.0/junit-jupiter-engine-5.10.0.jar:/home/aqa/.m2/repository/org/junit/platform/junit-platform-engine/1.10.0/junit-platform-engine-1.10.0.jar:/home/aqa/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.0/junit-jupiter-params-5.10.0.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -26,7 +26,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/aqa/calculator-project/target/surefire/surefirebooter13663134172702927065.jar"/>
+    <property name="surefire.real.class.path" value="/home/aqa/calculator-project/target/surefire/surefirebooter3169729372062559902.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.15+6-Ubuntu-0ubuntu124.04"/>
     <property name="user.name" value="aqa"/>
@@ -51,34 +51,28 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testExprEmptyInput" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.044"/>
-  <testcase name="testExprSubtract(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.023"/>
-  <testcase name="testExprSubtract(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprSubtract(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprSubtract(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprSubtract(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
-  <testcase name="testExprNonNumericArguments" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprAdd(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.008"/>
-  <testcase name="testExprAdd(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testExprAdd(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprAdd(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprAdd(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testExprLargeNumbers" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.009"/>
-  <testcase name="testExprBooleanAndStringComparisons(String, String)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprBooleanAndStringComparisons(String, String)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprBooleanAndStringComparisons(String, String)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
-  <testcase name="testExprBooleanAndStringComparisons(String, String)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprInvalidExpression" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.015"/>
-  <testcase name="testExprMultiply(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testExprMultiply(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testExprMultiply(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprMultiply(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testExprMultiply(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprDivide(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprDivide(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprDivide(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprDivide(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprVeryLongValidExpression" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprDivideByZero" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testExprFloatingPointNumbers" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcAdd(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.059"/>
+  <testcase name="testBcAdd(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcAdd(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.007"/>
+  <testcase name="testBcAdd(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcAdd(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcDivideByZero" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.013"/>
+  <testcase name="testBcMultiply(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcMultiply(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcMultiply(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcMultiply(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcMultiply(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcDivide(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcDivide(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcDivide(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcDivide(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcFloatingPointNumbers" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcSubtract(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
+  <testcase name="testBcSubtract(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcSubtract(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcSubtract(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcSubtract(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcInvalidExpression" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcVeryLongValidExpression" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcLargeNumbers" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
 </testsuite>
