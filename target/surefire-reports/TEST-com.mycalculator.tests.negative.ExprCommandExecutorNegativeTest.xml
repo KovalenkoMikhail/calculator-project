@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.mycalculator.tests.ExprCommandExecutorTest" time="0.163" tests="24" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.mycalculator.tests.negative.ExprCommandExecutorNegativeTest" time="0.033" tests="6" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -51,28 +51,10 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testBcAdd(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
-  <testcase name="testBcAdd(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.007"/>
-  <testcase name="testBcAdd(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcAdd(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcAdd(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcDivideByZero" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcMultiply(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcMultiply(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testBcMultiply(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testBcMultiply(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcMultiply(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcDivide(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.007"/>
-  <testcase name="testBcDivide(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcDivide(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcDivide(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcFloatingPointNumbers" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.004"/>
-  <testcase name="testBcSubtract(int, int, int)[1]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcSubtract(int, int, int)[2]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcSubtract(int, int, int)[3]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
-  <testcase name="testBcSubtract(int, int, int)[4]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
-  <testcase name="testBcSubtract(int, int, int)[5]" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
-  <testcase name="testBcInvalidExpression" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
-  <testcase name="testBcVeryLongValidExpression" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.006"/>
-  <testcase name="testBcLargeNumbers" classname="com.mycalculator.tests.ExprCommandExecutorTest" time="0.005"/>
+  <testcase name="testBcOnlyOperator" classname="com.mycalculator.tests.negative.ExprCommandExecutorNegativeTest" time="0.006"/>
+  <testcase name="testBcDivideByZeroFloat" classname="com.mycalculator.tests.negative.ExprCommandExecutorNegativeTest" time="0.005"/>
+  <testcase name="testBcDivideByZero" classname="com.mycalculator.tests.negative.ExprCommandExecutorNegativeTest" time="0.004"/>
+  <testcase name="testBcEmptyInput" classname="com.mycalculator.tests.negative.ExprCommandExecutorNegativeTest" time="0.004"/>
+  <testcase name="testBcInvalidCharacter" classname="com.mycalculator.tests.negative.ExprCommandExecutorNegativeTest" time="0.005"/>
+  <testcase name="testBcInvalidExpression" classname="com.mycalculator.tests.negative.ExprCommandExecutorNegativeTest" time="0.005"/>
 </testsuite>

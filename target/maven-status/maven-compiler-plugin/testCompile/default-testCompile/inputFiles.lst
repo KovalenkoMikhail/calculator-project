@@ -1,1 +1,3 @@
+/home/aqa/calculator-project/src/test/java/com/mycalculator/tests/negative/ExprCommandExecutorNegativeTest.java
+/home/aqa/calculator-project/src/test/java/com/mycalculator/tests/positive/ExprCommandExecutorPositiveTest.java
 /home/aqa/calculator-project/src/test/java/com/mycalculator/tests/ExprCommandExecutorTest.java

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test class for ExprCommandExecutor.java using JUnit 5.
- * Tests the behavior of the 'expr' command through the executor,
+ * Tests the behavior of the 'bc' command through the executor,
  * covering basic arithmetic, error reporting, and limits.
  * This version includes advanced test cases for non-standard inputs and boolean expressions,
  * utilizing MethodSource for parameterized test data.
@@ -162,5 +162,3 @@ public class ExprCommandExecutorTest {
         assertEquals(String.format("%.4f", expectedSum), result);
     }
 }
-
-// Все тесты перенесены в positive/negative. Этот файл можно удалить или оставить пустым.
