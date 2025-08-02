@@ -1,0 +1,42 @@
+# Java/Maven
+/target/
+*.class
+*.log
+*.iml
+*.ipr
+*.iws
+.idea/
+# Eclipse
+.project
+.classpath
+.settings/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Test reports
+/surefire-reports/
+/failsafe-reports/
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE specific files
+*.bak
+*.tmp
+*.swp
+*.swo
+*.orig
+*.rej
+
+# User specific files
+*.local
