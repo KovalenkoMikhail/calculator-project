@@ -92,6 +92,7 @@ public class EchoCommandExecutorPositiveTest {
     @Test
     @DisplayName("BC: Large numbers - Limits and Overflow")
     void testBcLargeNumbers() throws IOException, InterruptedException {
+        // Why: To check bc's behavior with numbers near 64-bit integer limits
         String largeNum = "9223372036854775807";
         String result = echoCommandExecutor.executeExprCommand(largeNum + " + 1");
         assertTrue(result.startsWith("922337203685477"),
@@ -101,6 +102,7 @@ public class EchoCommandExecutorPositiveTest {
     @Test
     @DisplayName("BC: Floating-point numbers - Behavior")
     void testBcFloatingPointNumbers() throws IOException, InterruptedException {
+        // Why: To verify correct handling of floating-point addition
         String result = echoCommandExecutor.executeExprCommand("5.5 + 3.2");
         assertEquals("8.7000", result);
     }
@@ -108,6 +110,7 @@ public class EchoCommandExecutorPositiveTest {
     @Test
     @DisplayName("BC: Very long valid expression - Limits")
     void testBcVeryLongValidExpression() throws IOException, InterruptedException {
+        // Why: To test bc's ability to handle very long expressions
         StringBuilder longExpressionBuilder = new StringBuilder("1");
         double expectedSum = 1;
         for (int i = 0; i < 1000; i++) {
