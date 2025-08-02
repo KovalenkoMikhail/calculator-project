@@ -1,3 +1,5 @@
+[![Java CI](https://github.com/KovalenkoMikhail/calculator-project/actions/workflows/ci.yml/badge.svg)](https://github.com/KovalenkoMikhail/calculator-project/actions/workflows/ci.yml)
+
 # Calculator CLI Testing (echo | bc)
 This project demonstrates a robust and efficient command-line calculator testing suite built by leveraging the power of standard Linux utilities `echo` and `bc`.
 ## Requirements
