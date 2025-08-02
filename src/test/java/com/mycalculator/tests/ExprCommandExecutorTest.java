@@ -6,10 +6,12 @@ package com.mycalculator.tests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest; // New import for parameterized tests
-import org.junit.jupiter.params.provider.CsvSource; // New import for CSV data source
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments; // New import for Arguments
+import org.junit.jupiter.params.provider.MethodSource; // Changed from CsvSource to MethodSource
 
 import java.io.IOException;
+import java.util.stream.Stream; // New import for Stream
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test class for ExprCommandExecutor.java using JUnit 5.
  * Tests the behavior of the 'expr' command through the executor,
  * covering basic arithmetic, error reporting, and limits.
+ * This version includes advanced test cases for non-standard inputs and boolean expressions,
+ * utilizing MethodSource for parameterized test data.
  */
 public class ExprCommandExecutorTest {
 
@@ -31,14 +35,60 @@ public class ExprCommandExecutorTest {
         exprCommandExecutor = new ExprCommandExecutor();
     }
 
+    // --- MethodSource for Parameterized Tests ---
+
+    static Stream<Arguments> additionTestCases() {
+        return Stream.of(
+            Arguments.of(5, 3, 8),      // positive + positive
+            Arguments.of(-5, 3, -2),    // negative + positive
+            Arguments.of(-5, -3, -8),   // negative + negative
+            Arguments.of(10, 0, 10),    // positive + zero
+            Arguments.of(0, 0, 0)       // zero + zero
+        );
+    }
+
+    static Stream<Arguments> subtractionTestCases() {
+        return Stream.of(
+            Arguments.of(5, 3, 2),      // positive - positive
+            Arguments.of(-5, 10, -15),  // negative - positive
+            Arguments.of(3, 5, -2),     // smaller - larger
+            Arguments.of(5, 0, 5),      // positive - zero
+            Arguments.of(0, 0, 0)       // zero - zero
+        );
+    }
+
+    static Stream<Arguments> multiplicationTestCases() {
+        return Stream.of(
+            Arguments.of(5, 3, 15),     // positive * positive
+            Arguments.of(-5, 3, -15),   // negative * positive
+            Arguments.of(-5, -3, 15),   // negative * negative
+            Arguments.of(5, 0, 0),      // positive * zero
+            Arguments.of(0, 0, 0)       // zero * zero
+        );
+    }
+
+    static Stream<Arguments> divisionTestCases() {
+        return Stream.of(
+            Arguments.of(6, 3, 2),      // positive / positive
+            Arguments.of(7, 2, 3),      // positive / positive (integer division)
+            Arguments.of(-6, 3, -2),    // negative / positive
+            Arguments.of(-6, -3, 2)     // negative / negative
+        );
+    }
+
+    static Stream<Arguments> booleanAndStringComparisonTestCases() {
+        return Stream.of(
+            Arguments.of("1 = 1", "1"),     // True boolean expression
+            Arguments.of("1 = 2", "0"),     // False boolean expression
+            Arguments.of("a = a", "1"),     // String comparison (true)
+            Arguments.of("a = b", "0")      // String comparison (false)
+        );
+    }
+
+    // --- Parameterized Tests using MethodSource ---
+
     @ParameterizedTest
-    @CsvSource({
-        "5, 3, 8",      // positive + positive
-        "-5, 3, -2",    // negative + positive
-        "-5, -3, -8",   // negative + negative
-        "10, 0, 10",    // positive + zero
-        "0, 0, 0"       // zero + zero
-    })
+    @MethodSource("additionTestCases")
     @DisplayName("Expr: Addition with various numbers (Parameterized)")
     void testExprAdd(int a, int b, int expectedResult) throws IOException, InterruptedException {
         String expression = a + " + " + b;
@@ -46,27 +96,15 @@ public class ExprCommandExecutorTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-        "5, 3, 2",      // positive - positive
-        "-5, 10, -15",  // negative - positive
-        "3, 5, -2",     // smaller - larger
-        "5, 0, 5",      // positive - zero
-        "0, 0, 0"       // zero - zero
-    })
+    @MethodSource("subtractionTestCases")
     @DisplayName("Expr: Subtraction with various numbers (Parameterized)")
-    void testExprSubtract(int a, int b, int expectedResult) throws IOException, InterruptedException {
+    void testExprSubtract(int a, int b, int expectedResult) throws IOException, InterruptedException { // FIXED: Removed duplicate 'int'
         String expression = a + " - " + b;
         assertEquals(String.valueOf(expectedResult), exprCommandExecutor.executeExprCommand(expression));
     }
 
     @ParameterizedTest
-    @CsvSource({
-        "5, 3, 15",     // positive * positive
-        "-5, 3, -15",   // negative * positive
-        "-5, -3, 15",   // negative * negative
-        "5, 0, 0",      // positive * zero
-        "0, 0, 0"       // zero * zero
-    })
+    @MethodSource("multiplicationTestCases")
     @DisplayName("Expr: Multiplication with various numbers (Parameterized)")
     void testExprMultiply(int a, int b, int expectedResult) throws IOException, InterruptedException {
         // Important: '*' needs to be escaped in expr, so use \\*
@@ -75,17 +113,24 @@ public class ExprCommandExecutorTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-        "6, 3, 2",      // positive / positive
-        "7, 2, 3",      // positive / positive (integer division)
-        "-6, 3, -2",    // negative / positive
-        "-6, -3, 2"     // negative / negative
-    })
+    @MethodSource("divisionTestCases")
     @DisplayName("Expr: Division with various numbers (Parameterized)")
     void testExprDivide(int a, int b, int expectedResult) throws IOException, InterruptedException {
         String expression = a + " / " + b;
         assertEquals(String.valueOf(expectedResult), exprCommandExecutor.executeExprCommand(expression));
     }
+
+    @ParameterizedTest
+    @MethodSource("booleanAndStringComparisonTestCases")
+    @DisplayName("Expr: Boolean expressions and string comparisons (Parameterized)")
+    void testExprBooleanAndStringComparisons(String expression, String expectedResult) throws IOException, InterruptedException {
+        // For boolean expressions, expr returns "1" for true and "0" for false.
+        // It also handles string comparisons.
+        assertEquals(expectedResult, exprCommandExecutor.executeExprCommand(expression),
+                "Boolean/string comparison should return expected 1 or 0");
+    }
+
+    // --- Standard Test Cases (Non-Parameterized) ---
 
     @Test
     @DisplayName("Expr: Division by zero - Error Reporting")
@@ -98,7 +143,6 @@ public class ExprCommandExecutorTest {
         // Verify the error message from 'expr' itself
         assertTrue(thrown.getMessage().contains("expr: division by zero"),
                 "Error message should contain 'division by zero'");
-        // Verify the exit code reported by ExprCommandExecutor
         assertTrue(thrown.getMessage().contains("exit code 2"),
                 "Error message should indicate exit code 2 from expr");
     }
@@ -106,7 +150,7 @@ public class ExprCommandExecutorTest {
     @Test
     @DisplayName("Expr: Invalid expression - Error Reporting")
     void testExprInvalidExpression() {
-        // Based on user's expr output for "expr 5 +": no output, exit code 2.
+        // Based on expr output for "expr 5 +": no output, exit code 2.
         // The test expects IllegalArgumentException.
         // If expr 5 + returns exit code 2 and empty output, it will be caught by ExprCommandExecutor.
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
@@ -142,7 +186,7 @@ public class ExprCommandExecutorTest {
     @Test
     @DisplayName("Expr: Floating-point numbers - Behavior")
     void testExprFloatingPointNumbers() {
-        // Based on user's expr output: expr 5.5 + 3.2 -> ?expr: non-integer argument (exit code 2)
+        // Based on expr output: expr 5.5 + 3.2 -> ?expr: non-integer argument (exit code 2)
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             exprCommandExecutor.executeExprCommand("5.5 + 3.2");
         }, "expr should not handle floating-point numbers directly and throw an error");
@@ -151,5 +195,51 @@ public class ExprCommandExecutorTest {
                 "Error message should indicate non-integer argument for floating points");
         assertTrue(thrown.getMessage().contains("exit code 2"),
                 "Error message should indicate exit code 2 from expr");
+    }
+
+    @Test
+    @DisplayName("Expr: Empty input - Error Reporting (Specific message for this expr version)")
+    void testExprEmptyInput() {
+        // 'expr' on this system returns "missing operand" for empty input
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            exprCommandExecutor.executeExprCommand("");
+        }, "Empty expr input should cause an IllegalArgumentException");
+
+        assertTrue(thrown.getMessage().contains("expr: missing operand"),
+                "Error message should contain 'missing operand' for empty input");
+        assertTrue(thrown.getMessage().contains("exit code 2"),
+                "Error message should indicate exit code 2 for empty input");
+    }
+
+    @Test
+    @DisplayName("Expr: Non-numeric arguments - Error Reporting (Specific message for this expr version)")
+    void testExprNonNumericArguments() {
+        // 'expr' on this system returns "non-integer argument" for non-numeric arguments in arithmetic operations
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            exprCommandExecutor.executeExprCommand("a + b");
+        }, "Non-numeric arguments should cause an IllegalArgumentException");
+
+        assertTrue(thrown.getMessage().contains("expr: non-integer argument"),
+                "Error message should indicate 'non-integer argument' for non-numeric arguments");
+        assertTrue(thrown.getMessage().contains("exit code 2"),
+                "Error message should indicate exit code 2 from expr");
+    }
+
+    @Test
+    @DisplayName("Expr: Very long valid expression - Limits")
+    void testExprVeryLongValidExpression() throws IOException, InterruptedException {
+        // Test if expr handles very long, but syntactically correct, expressions.
+        // Some shell limits or expr limits might exist, but usually they are very high.
+        // Construct a long string like "1 + 1 + 1 + ... + 1"
+        StringBuilder longExpressionBuilder = new StringBuilder("1");
+        long expectedSum = 1;
+        for (int i = 0; i < 1000; i++) { // Create an expression with 1000 additions
+            longExpressionBuilder.append(" + 1");
+            expectedSum++;
+        }
+        String longExpression = longExpressionBuilder.toString();
+
+        String result = exprCommandExecutor.executeExprCommand(longExpression);
+        assertEquals(String.valueOf(expectedSum), result, "Expr should correctly calculate a very long expression");
     }
 }
