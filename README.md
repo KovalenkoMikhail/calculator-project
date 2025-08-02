@@ -1,81 +1,57 @@
-expr Command Testing Project
+# Calculator CLI Testing (echo | bc)
+This project demonstrates a robust and efficient command-line calculator testing suite built by leveraging the power of standard Linux utilities `echo` and `bc`.
+## Requirements
+- Linux (or WSL)
+- Java 21:
+  ```sh
+  sudo apt update
+  sudo apt install openjdk-21-jdk
+  java -version
+  # Should print: openjdk version "21..."
+  ```
+- Maven:
+  ```sh
+  sudo apt install maven
+  mvn -version
+  # Should print: Apache Maven ...
+  ```
+- bc:
+  ```sh
+  sudo apt install bc
+  bc --version
+  # Should print: bc ...
+  ```
 
-This project demonstrates writing unit tests in Java using Maven and JUnit 5 for the external command-line utility expr, available in Linux (WSL).
-Project Goal
+## Quick Start
+```sh
+git clone https://github.com/KovalenkoMikhail/calculator-project.git
+cd calculator-project
+mvn test
+```
 
-The primary goal is to showcase the ability to:
+## Project Structure
+```
+src/main/java/com/mycalculator/tests/EchoCommandExecutor.java      # CLI runner
+src/test/java/com/mycalculator/tests/positive/EchoCommandExecutorPositiveTest.java  # Positive tests
+src/test/java/com/mycalculator/tests/negative/EchoCommandExecutorNegativeTest.java  # Negative tests
+pom.xml
+```
 
-    Interact with external software (in this case, expr) from Java.
+## Test Coverage
+- Arithmetic: +, -, *, / (including negative, zero)
+- Floating-point numbers
+- Large numbers
+- Long expressions
+- Error handling: division by zero, syntax errors, empty input, invalid characters
 
-    Write automated tests to verify the functionality of such tools.
+## Example
+```sh
+echo "scale=4; 5.5 + 3.2" | bc   # 8.7000
+echo "scale=4; 10 / 0" | bc      # Runtime error (Divide by zero)
+```
 
-    Investigate and demonstrate the limits of the tested software.
-
-    Check its error reporting.
-
-Technologies Used
-
-    Java 17: The programming language.
-
-    Maven: The build automation and dependency management tool.
-
-    JUnit 5 (Jupiter): The unit testing framework, including Parameterized Tests for efficient scenario coverage.
-
-    WSL (Windows Subsystem for Linux): The development environment where the expr command is executed.
-
-Project Structure
-
-calculator-tests/
-├── src/
-│   ├── main/java/
-│   │   └── com/mycalculator/tests/
-│   │       └── ExprCommandExecutor.java  # Class for executing 'expr' commands
-│   └── test/java/
-│       └── com/mycalculator/tests/
-│           └── ExprCommandExecutorTest.java # Unit tests for ExprCommandExecutor
-├── pom.xml                                 # Maven configuration
-└── README.md                               # This file
-
-How to Run Tests
-
-    Ensure WSL (Windows Subsystem for Linux) is installed and the expr command is available within it.
-
-    Clone the repository (if you haven't already):
-
-    git clone https://github.com/KovalenkoMikhail/calculator-tests.git
-    cd calculator-tests
-
-    Open a WSL terminal in the project's root directory (calculator-tests).
-
-    Execute the Maven command to build the project and run tests:
-
-    mvn clean install
-
-        clean: Cleans up previously compiled files.
-
-        install: Compiles the main code, compiles and runs the tests, and then installs the artifact to the local Maven repository.
-
-Demonstrating expr Limits and Error Reporting
-
-ExprCommandExecutorTest.java contains tests that demonstrate key aspects of expr's behavior:
-
-    Basic Arithmetic Operations: Covered using parameterized tests, ensuring efficient and readable testing of various number combinations (positive, negative, zero).
-
-    Division by Zero: The testExprDivideByZero test verifies that expr correctly reports a "division by zero" error and returns the corresponding exit code (2).
-
-    Invalid Syntax: The testExprInvalidExpression test demonstrates how expr reacts to incomplete or syntactically incorrect expressions, returning an error and exit code (2).
-
-    Large Numbers (Overflow/Limits): The testExprLargeNumbers test investigates expr's behavior when dealing with numbers exceeding standard integer ranges. In your environment, expr for very large numbers returns "0" with exit code 1 or the direct value, showcasing its specific limits.
-
-    Floating-Point Numbers: The testExprFloatingPointNumbers test shows that expr performs integer arithmetic by default and reports an error ("non-integer argument") when attempting to use floating-point numbers.
-
-Advanced expr Output Handling
-
-The ExprCommandExecutor.java class has been enhanced to read expr's standard output (stdout) and standard error stream (stderr) separately. This provides more precise control over distinguishing between operation results and error messages, increasing the reliability and informational value of external command processing.
-Test Output
-
-After successfully running mvn clean install, you will see a test report indicating that all tests passed without failures or errors:
-
-[INFO] Tests run: XX, Failures: 0, Errors: 0, Skipped: 0
-[INFO] BUILD SUCCESS
+---
+- All tests run with: `mvn test`
+- Uses only standard Linux tools (`echo`, `bc`)
+- Clean code, ready for CI
 
