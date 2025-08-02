@@ -1,45 +1,81 @@
-# Java Calculator with Unit Tests
+expr Command Testing Project
 
-## Project Overview
+This project demonstrates writing unit tests in Java using Maven and JUnit 5 for the external command-line utility expr, available in Linux (WSL).
+Project Goal
 
-This project implements basic arithmetic operations (addition, subtraction, multiplication, division) in Java and provides a set of unit tests using JUnit 5. The tests cover various scenarios, including standard operations, handling of negative numbers and zero, as well as edge cases like division by zero and integer overflow.
+The primary goal is to showcase the ability to:
 
-The project uses Apache Maven for build automation and is designed to be run from the Linux command line (e.g., within WSL).
+    Interact with external software (in this case, expr) from Java.
 
-## Prerequisites
+    Write automated tests to verify the functionality of such tools.
 
-To build and run this project, you need:
+    Investigate and demonstrate the limits of the tested software.
 
-* **Java Development Kit (JDK) 17** or newer.
-* **Apache Maven** (latest stable version recommended).
-* **Linux operating system** (e.g., Ubuntu, Debian) or **Windows Subsystem for Linux (WSL)**.
+    Check its error reporting.
 
-## How to Run Tests
+Technologies Used
 
-1.  **Clone this repository or unpack the project archive.**
-    Navigate to the project's root directory (where `pom.xml` is located).
+    Java 17: The programming language.
 
-2.  **Open your Linux terminal** (e.g., Ubuntu in WSL).
+    Maven: The build automation and dependency management tool.
 
-3.  **Navigate to the project's root directory** (`calculator-tests`):
-    ```bash
-    cd ~/your_path/calculator-tests
-    ```
+    JUnit 5 (Jupiter): The unit testing framework, including Parameterized Tests for efficient scenario coverage.
 
-4.  **Execute all unit tests using Maven:**
-    ```bash
-    mvn test
-    ```
-    Maven will compile the source code, download dependencies, and run the tests. A `BUILD SUCCESS` message indicates all tests passed.
+    WSL (Windows Subsystem for Linux): The development environment where the expr command is executed.
 
-## Behavior at Limits and Error Handling
+Project Structure
 
-This project explores specific behaviors of arithmetic operations in Java:
+calculator-tests/
+├── src/
+│   ├── main/java/
+│   │   └── com/mycalculator/tests/
+│   │       └── ExprCommandExecutor.java  # Class for executing 'expr' commands
+│   └── test/java/
+│       └── com/mycalculator/tests/
+│           └── ExprCommandExecutorTest.java # Unit tests for ExprCommandExecutor
+├── pom.xml                                 # Maven configuration
+└── README.md                               # This file
 
-* **Division by Zero:**
-    * The `divide` method explicitly checks for division by zero and throws an `IllegalArgumentException`.
-    * Tests (`testDivideByZero`) confirm this expected exception.
+How to Run Tests
 
-* **Integer Overflow/Underflow:**
-    * Java's `int` and `long` primitive types do **not** throw exceptions on overflow/underflow. Instead, the result wraps around.
-    * Tests (`testIntOverflowAddition`, `testIntUnderflowSubtraction`, `testIntOverflowMultiplication`) verify this wrapping behavior for `int` type. For handling arbitrarily large numbers, Java provides `java.math.BigInteger` and `java.math.BigDecimal`.
+    Ensure WSL (Windows Subsystem for Linux) is installed and the expr command is available within it.
+
+    Clone the repository (if you haven't already):
+
+    git clone https://github.com/KovalenkoMikhail/calculator-tests.git
+    cd calculator-tests
+
+    Open a WSL terminal in the project's root directory (calculator-tests).
+
+    Execute the Maven command to build the project and run tests:
+
+    mvn clean install
+
+        clean: Cleans up previously compiled files.
+
+        install: Compiles the main code, compiles and runs the tests, and then installs the artifact to the local Maven repository.
+
+Demonstrating expr Limits and Error Reporting
+
+ExprCommandExecutorTest.java contains tests that demonstrate key aspects of expr's behavior:
+
+    Basic Arithmetic Operations: Covered using parameterized tests, ensuring efficient and readable testing of various number combinations (positive, negative, zero).
+
+    Division by Zero: The testExprDivideByZero test verifies that expr correctly reports a "division by zero" error and returns the corresponding exit code (2).
+
+    Invalid Syntax: The testExprInvalidExpression test demonstrates how expr reacts to incomplete or syntactically incorrect expressions, returning an error and exit code (2).
+
+    Large Numbers (Overflow/Limits): The testExprLargeNumbers test investigates expr's behavior when dealing with numbers exceeding standard integer ranges. In your environment, expr for very large numbers returns "0" with exit code 1 or the direct value, showcasing its specific limits.
+
+    Floating-Point Numbers: The testExprFloatingPointNumbers test shows that expr performs integer arithmetic by default and reports an error ("non-integer argument") when attempting to use floating-point numbers.
+
+Advanced expr Output Handling
+
+The ExprCommandExecutor.java class has been enhanced to read expr's standard output (stdout) and standard error stream (stderr) separately. This provides more precise control over distinguishing between operation results and error messages, increasing the reliability and informational value of external command processing.
+Test Output
+
+After successfully running mvn clean install, you will see a test report indicating that all tests passed without failures or errors:
+
+[INFO] Tests run: XX, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+

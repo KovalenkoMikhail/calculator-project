@@ -7,38 +7,43 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors; // New import for Collectors
 
 /**
  * A utility class to execute 'expr' shell commands and capture their output and exit code.
  * This class serves as the "software under test" for demonstrating command-line tool testing.
+ * This version specifically handles stdout and stderr separately for more precise error reporting.
  */
 public class ExprCommandExecutor {
 
     /**
-     * Executes a given 'expr' command and returns its output.
+     * Executes a given 'expr' command and returns its standard output.
+     * If 'expr' returns a non-zero exit code, an IllegalArgumentException is thrown,
+     * including any error messages from stderr.
      *
      * @param expression The mathematical expression for 'expr', e.g., "5 + 3".
      * @return The standard output of the 'expr' command.
      * @throws IOException If an I/O error occurs (e.g., command not found).
      * @throws InterruptedException If the current thread is interrupted while waiting for the process to complete.
-     * @throws IllegalArgumentException If the 'expr' command itself returns a non-zero exit code (specifically 2 for errors), or if exit code 1 with an unexpected empty output.
+     * @throws IllegalArgumentException If the 'expr' command itself returns a non-zero exit code (specifically 2 for errors), or if exit code 1 with an unexpected empty stdout.
      * @throws RuntimeException If the command execution fails or times out unexpectedly.
      */
     public String executeExprCommand(String expression) throws IOException, InterruptedException {
-        // Use "sh", "-c" to ensure the command is executed correctly in a shell,
-        // especially important for expressions with spaces or special characters.
-        // This makes the command "expr <expression>"
         ProcessBuilder builder = new ProcessBuilder("sh", "-c", "expr " + expression);
-        builder.redirectErrorStream(true); // Redirect error stream to output stream to capture all messages
+        // builder.redirectErrorStream(true); // NO LONGER REDIRECTING ERROR STREAM
 
         Process process = builder.start();
 
-        // Read the output from the command
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        StringBuilder output = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            output.append(line);
+        // Read stdout and stderr separately
+        String stdout;
+        String stderr;
+
+        // Use try-with-resources for BufferedReader to ensure they are closed
+        try (BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            stdout = stdoutReader.lines().collect(Collectors.joining(System.lineSeparator()));
+        }
+        try (BufferedReader stderrReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+            stderr = stderrReader.lines().collect(Collectors.joining(System.lineSeparator()));
         }
 
         // Wait for the process to complete with a timeout
@@ -48,25 +53,38 @@ public class ExprCommandExecutor {
             throw new RuntimeException("Command timed out: expr " + expression);
         }
 
-        // Get the exit code to determine if 'expr' reported an error
         int exitCode = process.exitValue();
-        String exprOutput = output.toString().trim();
+        String trimmedStdout = stdout.trim();
+        String trimmedStderr = stderr.trim();
 
         // expr exit codes on GNU systems (common behavior):
         // 0: expression is neither null nor 0 (success)
         // 1: expression is null or 0 (e.g., "0" result, or empty string for boolean false)
         // 2: syntax error or other invalid operation (true error)
 
-        // Throw IllegalArgumentException only for true errors (exit code 2)
-        // or if exit code is 1 AND the output is empty (which for arithmetic usually means an error)
-        // If output is "0" and exitCode is 1, it's a valid result, not an error.
         if (exitCode == 2) {
-            throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + exprOutput);
-        } else if (exitCode == 1 && exprOutput.isEmpty()) {
-            // This handles cases where expr returns exit code 1 but no output, which is an error.
-            throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + exprOutput);
+            // True error from expr (syntax error, division by zero, non-integer argument)
+            // The error message is typically in stderr, but sometimes also printed to stdout before exit.
+            String errorMessage = trimmedStderr.isEmpty() ? trimmedStdout : trimmedStderr;
+            throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + errorMessage);
+        } else if (exitCode == 1) {
+            // exit code 1 means "expression is null or 0".
+            // If stdout is "0", it's a valid result.
+            // If stdout is empty, it's typically an error for arithmetic operations.
+            if (trimmedStdout.equals("0")) {
+                return trimmedStdout; // Valid "0" result
+            } else if (trimmedStdout.isEmpty() && !trimmedStderr.isEmpty()) {
+                // If stdout is empty but stderr has a message, it's an error.
+                throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + trimmedStderr);
+            } else if (trimmedStdout.isEmpty()) {
+                 // If both stdout and stderr are empty, but exit code is 1, it's an unexpected scenario for arithmetic.
+                throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": (no output)");
+            }
+            // If stdout is not "0" but not empty, and exit code is 1, it's an unexpected case.
+            // We'll treat it as an error for robustness.
+            throw new IllegalArgumentException("Expr command failed with exit code " + exitCode + ": " + trimmedStdout);
         }
-        // For exitCode 0, or exitCode 1 with non-empty output (like "0"), we return the output.
-        return exprOutput;
+        // For exitCode 0, return stdout.
+        return trimmedStdout;
     }
 }

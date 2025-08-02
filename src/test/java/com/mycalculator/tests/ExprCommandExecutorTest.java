@@ -6,6 +6,8 @@ package com.mycalculator.tests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest; // New import for parameterized tests
+import org.junit.jupiter.params.provider.CsvSource; // New import for CSV data source
 
 import java.io.IOException;
 
@@ -29,73 +31,60 @@ public class ExprCommandExecutorTest {
         exprCommandExecutor = new ExprCommandExecutor();
     }
 
-    @Test
-    @DisplayName("Expr: Addition of positive numbers")
-    void testExprAddPositive() throws IOException, InterruptedException {
-        assertEquals("8", exprCommandExecutor.executeExprCommand("5 + 3"));
+    @ParameterizedTest
+    @CsvSource({
+        "5, 3, 8",      // positive + positive
+        "-5, 3, -2",    // negative + positive
+        "-5, -3, -8",   // negative + negative
+        "10, 0, 10",    // positive + zero
+        "0, 0, 0"       // zero + zero
+    })
+    @DisplayName("Expr: Addition with various numbers (Parameterized)")
+    void testExprAdd(int a, int b, int expectedResult) throws IOException, InterruptedException {
+        String expression = a + " + " + b;
+        assertEquals(String.valueOf(expectedResult), exprCommandExecutor.executeExprCommand(expression));
     }
 
-    @Test
-    @DisplayName("Expr: Subtraction of positive numbers")
-    void testExprSubtractPositive() throws IOException, InterruptedException {
-        assertEquals("2", exprCommandExecutor.executeExprCommand("5 - 3"));
+    @ParameterizedTest
+    @CsvSource({
+        "5, 3, 2",      // positive - positive
+        "-5, 10, -15",  // negative - positive
+        "3, 5, -2",     // smaller - larger
+        "5, 0, 5",      // positive - zero
+        "0, 0, 0"       // zero - zero
+    })
+    @DisplayName("Expr: Subtraction with various numbers (Parameterized)")
+    void testExprSubtract(int a, int b, int expectedResult) throws IOException, InterruptedException {
+        String expression = a + " - " + b;
+        assertEquals(String.valueOf(expectedResult), exprCommandExecutor.executeExprCommand(expression));
     }
 
-    @Test
-    @DisplayName("Expr: Multiplication of positive numbers")
-    void testExprMultiplyPositive() throws IOException, InterruptedException {
-        assertEquals("15", exprCommandExecutor.executeExprCommand("5 \\* 3")); // Note: '*' needs to be escaped in expr
+    @ParameterizedTest
+    @CsvSource({
+        "5, 3, 15",     // positive * positive
+        "-5, 3, -15",   // negative * positive
+        "-5, -3, 15",   // negative * negative
+        "5, 0, 0",      // positive * zero
+        "0, 0, 0"       // zero * zero
+    })
+    @DisplayName("Expr: Multiplication with various numbers (Parameterized)")
+    void testExprMultiply(int a, int b, int expectedResult) throws IOException, InterruptedException {
+        // Important: '*' needs to be escaped in expr, so use \\*
+        String expression = a + " \\* " + b;
+        assertEquals(String.valueOf(expectedResult), exprCommandExecutor.executeExprCommand(expression));
     }
 
-    @Test
-    @DisplayName("Expr: Division of positive numbers")
-    void testExprDividePositive() throws IOException, InterruptedException {
-        assertEquals("2", exprCommandExecutor.executeExprCommand("6 / 3"));
-    }
-
-    @Test
-    @DisplayName("Expr: Addition with negative numbers")
-    void testExprAddNegative() throws IOException, InterruptedException {
-        assertEquals("-2", exprCommandExecutor.executeExprCommand("-5 + 3"));
-        assertEquals("-8", exprCommandExecutor.executeExprCommand("-5 + -3"));
-    }
-
-    @Test
-    @DisplayName("Expr: Subtraction with negative numbers")
-    void testExprSubtractNegative() throws IOException, InterruptedException {
-        assertEquals("-8", exprCommandExecutor.executeExprCommand("-5 - 3"));
-        assertEquals("-2", exprCommandExecutor.executeExprCommand("3 - 5"));
-    }
-
-    @Test
-    @DisplayName("Expr: Multiplication with negative numbers")
-    void testExprMultiplyNegative() throws IOException, InterruptedException {
-        assertEquals("-15", exprCommandExecutor.executeExprCommand("-5 \\* 3"));
-        assertEquals("15", exprCommandExecutor.executeExprCommand("-5 \\* -3"));
-    }
-
-    @Test
-    @DisplayName("Expr: Division with negative numbers")
-    void testExprDivideNegative() throws IOException, InterruptedException {
-        assertEquals("-2", exprCommandExecutor.executeExprCommand("-6 / 3"));
-        assertEquals("2", exprCommandExecutor.executeExprCommand("-6 / -3"));
-    }
-
-    @Test
-    @DisplayName("Expr: Addition with zero")
-    void testExprAddZero() throws IOException, InterruptedException {
-        // Based on user's expr output: expr 5 + 0 -> 5 (exit code 0)
-        assertEquals("5", exprCommandExecutor.executeExprCommand("5 + 0"));
-        // Based on user's expr output: expr 0 + 0 -> 0 (exit code 1)
-        assertEquals("0", exprCommandExecutor.executeExprCommand("0 + 0"));
-    }
-
-    @Test
-    @DisplayName("Expr: Multiplication by zero")
-    void testExprMultiplyZero() throws IOException, InterruptedException {
-        // Based on user's expr output: expr 5 \* 0 -> 0 (exit code 1)
-        assertEquals("0", exprCommandExecutor.executeExprCommand("5 \\* 0"));
-        assertEquals("0", exprCommandExecutor.executeExprCommand("0 \\* 0"));
+    @ParameterizedTest
+    @CsvSource({
+        "6, 3, 2",      // positive / positive
+        "7, 2, 3",      // positive / positive (integer division)
+        "-6, 3, -2",    // negative / positive
+        "-6, -3, 2"     // negative / negative
+    })
+    @DisplayName("Expr: Division with various numbers (Parameterized)")
+    void testExprDivide(int a, int b, int expectedResult) throws IOException, InterruptedException {
+        String expression = a + " / " + b;
+        assertEquals(String.valueOf(expectedResult), exprCommandExecutor.executeExprCommand(expression));
     }
 
     @Test
@@ -132,17 +121,22 @@ public class ExprCommandExecutorTest {
     @Test
     @DisplayName("Expr: Large numbers - Limits and Overflow")
     void testExprLargeNumbers() throws IOException, InterruptedException {
-        // GNU expr: при переполнении может вернуть либо "0", либо переполненное значение (например, "9223372036854775808")
+        // Based on user's MOST RECENT expr output: expr 9223372036854775807 + 1 -> 9223372036854775808 (no error)
         String largeNum = "9223372036854775807"; // Long.MAX_VALUE
+        String expectedResultForLargeNum = "9223372036854775808"; // This is (Long.MAX_VALUE + 1) as a string
         String result = exprCommandExecutor.executeExprCommand(largeNum + " + 1");
-        assertTrue(result.equals("0") || result.equals("9223372036854775808"),
-            "expr should return 0 or the overflowed value for this specific expr version, got: " + result);
+        assertEquals(expectedResultForLargeNum, result, "expr should return the direct result for this large number");
 
-        // Проверяем число чуть больше 64-битного диапазона
+        // Test with a number just beyond typical 64-bit signed integer range
+        // Based on user's MOST RECENT expr output, it also returns the direct result.
         String veryLargeNum = "9223372036854775808"; // Long.MAX_VALUE + 1 (as string)
+        String expectedResultForVeryLargeNum = "9223372036854775809"; // This is (Long.MAX_VALUE + 2) as a string
         String resultVeryLarge = exprCommandExecutor.executeExprCommand(veryLargeNum + " + 1");
-        assertTrue(resultVeryLarge.equals("0") || resultVeryLarge.equals("9223372036854775809"),
-            "expr should return 0 or the overflowed value for numbers exceeding its internal limits, got: " + resultVeryLarge);
+        assertEquals(expectedResultForVeryLargeNum, resultVeryLarge, "expr should return the direct result for numbers exceeding its internal limits for this specific expr version");
+
+        // If your expr *does* throw an error for truly massive numbers (e.g., beyond 64-bit),
+        // you would add a separate assertThrows test for that.
+        // For the provided output, it seems to just return the direct result.
     }
 
     @Test
