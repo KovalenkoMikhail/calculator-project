@@ -20,10 +20,11 @@ public class EchoCommandExecutorNegativeTest {
     void testBcDivideByZero() {
         // Why: Division by zero should always throw an error in bc
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
-            echoCommandExecutor.executeExprCommand("10 / 0");
+            echoCommandExecutor.executeEchoCommand("10 / 0");
         });
         assertTrue(
             thrown.getMessage().toLowerCase().contains("divide by zero") ||
+            thrown.getMessage().toLowerCase().contains("divide by 0") ||
             thrown.getMessage().toLowerCase().contains("runtime error"),
             "Error message should contain 'divide by zero' or 'runtime error', actual: " + thrown.getMessage()
         );
@@ -34,7 +35,7 @@ public class EchoCommandExecutorNegativeTest {
     void testBcInvalidExpression() {
         // Why: Invalid syntax should be caught and reported
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
-            echoCommandExecutor.executeExprCommand("5 +");
+            echoCommandExecutor.executeEchoCommand("5 +");
         });
         assertTrue(
             thrown.getMessage().toLowerCase().contains("syntax error") ||
@@ -48,7 +49,7 @@ public class EchoCommandExecutorNegativeTest {
     void testBcEmptyInput() {
         // Why: Empty input should not be accepted by bc
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
-            echoCommandExecutor.executeExprCommand("");
+            echoCommandExecutor.executeEchoCommand("");
         });
         assertTrue(
             thrown.getMessage().toLowerCase().contains("syntax error") ||
@@ -63,7 +64,7 @@ public class EchoCommandExecutorNegativeTest {
     void testBcInvalidCharacter() {
         // Why: Invalid characters should be rejected by bc
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
-            echoCommandExecutor.executeExprCommand("5 + $");
+            echoCommandExecutor.executeEchoCommand("5 + $");
         });
         assertTrue(
             thrown.getMessage().toLowerCase().contains("syntax error") ||
@@ -77,10 +78,11 @@ public class EchoCommandExecutorNegativeTest {
     void testBcDivideByZeroFloat() {
         // Why: Division by zero with float should also throw
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
-            echoCommandExecutor.executeExprCommand("10.0 / 0");
+            echoCommandExecutor.executeEchoCommand("10.0 / 0");
         });
         assertTrue(
             thrown.getMessage().toLowerCase().contains("divide by zero") ||
+            thrown.getMessage().toLowerCase().contains("divide by 0") ||
             thrown.getMessage().toLowerCase().contains("runtime error"),
             "Error message should contain 'divide by zero' or 'runtime error', actual: " + thrown.getMessage()
         );
@@ -91,7 +93,7 @@ public class EchoCommandExecutorNegativeTest {
     void testBcOnlyOperator() {
         // Why: Only operator should not be accepted by bc
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
-            echoCommandExecutor.executeExprCommand("+");
+            echoCommandExecutor.executeEchoCommand("+");
         });
         assertTrue(
             thrown.getMessage().toLowerCase().contains("syntax error") ||

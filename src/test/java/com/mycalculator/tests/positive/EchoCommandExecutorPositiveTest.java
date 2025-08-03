@@ -62,7 +62,7 @@ public class EchoCommandExecutorPositiveTest {
     @DisplayName("BC: Addition with various numbers (Parameterized)")
     void testBcAdd(int a, int b, int expectedResult) throws IOException, InterruptedException {
         String expression = a + " + " + b;
-        assertEquals(String.valueOf(expectedResult) + ".0000", echoCommandExecutor.executeExprCommand(expression));
+        assertEquals(String.valueOf(expectedResult) + ".0000", echoCommandExecutor.executeEchoCommand(expression));
     }
 
     @ParameterizedTest
@@ -70,7 +70,7 @@ public class EchoCommandExecutorPositiveTest {
     @DisplayName("BC: Subtraction with various numbers (Parameterized)")
     void testBcSubtract(int a, int b, int expectedResult) throws IOException, InterruptedException {
         String expression = a + " - " + b;
-        assertEquals(String.valueOf(expectedResult) + ".0000", echoCommandExecutor.executeExprCommand(expression));
+        assertEquals(String.valueOf(expectedResult) + ".0000", echoCommandExecutor.executeEchoCommand(expression));
     }
 
     @ParameterizedTest
@@ -78,7 +78,7 @@ public class EchoCommandExecutorPositiveTest {
     @DisplayName("BC: Multiplication with various numbers (Parameterized)")
     void testBcMultiply(int a, int b, int expectedResult) throws IOException, InterruptedException {
         String expression = a + " * " + b;
-        assertEquals(String.valueOf(expectedResult) + ".0000", echoCommandExecutor.executeExprCommand(expression));
+        assertEquals(String.valueOf(expectedResult) + ".0000", echoCommandExecutor.executeEchoCommand(expression));
     }
 
     @ParameterizedTest
@@ -86,7 +86,7 @@ public class EchoCommandExecutorPositiveTest {
     @DisplayName("BC: Division with various numbers (Parameterized)")
     void testBcDivide(int a, int b, int expectedResult) throws IOException, InterruptedException {
         String expression = a + " / " + b;
-        assertEquals(String.format("%.4f", (double)a / b), echoCommandExecutor.executeExprCommand(expression));
+        assertEquals(String.format("%.4f", (double)a / b), echoCommandExecutor.executeEchoCommand(expression));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class EchoCommandExecutorPositiveTest {
     void testBcLargeNumbers() throws IOException, InterruptedException {
         // Why: To check bc's behavior with numbers near 64-bit integer limits
         String largeNum = "9223372036854775807";
-        String result = echoCommandExecutor.executeExprCommand(largeNum + " + 1");
+        String result = echoCommandExecutor.executeEchoCommand(largeNum + " + 1");
         assertTrue(result.startsWith("922337203685477"),
             "Result should start with '922337203685477', but was: " + result);
     }
@@ -103,7 +103,7 @@ public class EchoCommandExecutorPositiveTest {
     @DisplayName("BC: Floating-point numbers - Behavior")
     void testBcFloatingPointNumbers() throws IOException, InterruptedException {
         // Why: To verify correct handling of floating-point addition
-        String result = echoCommandExecutor.executeExprCommand("5.5 + 3.2");
+        String result = echoCommandExecutor.executeEchoCommand("5.5 + 3.2");
         assertEquals("8.7000", result);
     }
 
@@ -118,7 +118,7 @@ public class EchoCommandExecutorPositiveTest {
             expectedSum++;
         }
         String longExpression = longExpressionBuilder.toString();
-        String result = echoCommandExecutor.executeExprCommand(longExpression);
+        String result = echoCommandExecutor.executeEchoCommand(longExpression);
         assertEquals(String.format("%.4f", expectedSum), result);
     }
 }

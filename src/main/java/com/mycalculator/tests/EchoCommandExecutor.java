@@ -40,8 +40,4 @@ public class EchoCommandExecutor {
         }
     }
 
-    // For legacy compatibility only; all logic is in executeEchoCommand
-    public String executeExprCommand(String expression) throws IOException, InterruptedException {
-        return executeEchoCommand(expression);
-    }
 }

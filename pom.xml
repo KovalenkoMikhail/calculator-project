@@ -12,25 +12,22 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.jupiter.version>5.10.0</junit.jupiter.version> <!-- Using a specific stable version -->
+        <junit.jupiter.version>5.10.0</junit.jupiter.version>
     </properties>
 
     <dependencies>
-        <!-- JUnit Jupiter API for writing tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- JUnit Jupiter Engine for running tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- NEW: JUnit Jupiter Params for parameterized tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
@@ -44,7 +41,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version> <!-- Use a recent stable version -->
+                <version>3.8.1</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -53,9 +50,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version> <!-- Use a recent stable version for running tests -->
+                <version>3.0.0-M5</version>
             </plugin>
-            <!-- Checkstyle plugin for code style validation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -65,9 +61,12 @@
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
+                    <useFile>false</useFile>
+                    <printSummary>true</printSummary>
+                    <reportFormat>plain</reportFormat>
+                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
                 </configuration>
             </plugin>
-            <!-- Note: The exec-maven-plugin is intentionally excluded as it's not needed for this task. -->
         </plugins>
     </build>
 
