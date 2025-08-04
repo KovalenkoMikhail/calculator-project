@@ -23,38 +23,37 @@ public class EchoCommandExecutorPositiveTest {
 
     static Stream<Arguments> additionTestCases() {
         return Stream.of(
-            Arguments.of(5, 3, 8),
-            Arguments.of(-5, 3, -2),
-            Arguments.of(-5, -3, -8),
-            Arguments.of(10, 0, 10),
-            Arguments.of(0, 0, 0)
-        );
+                Arguments.of(5, 3, 8),
+                Arguments.of(-5, 3, -2),
+                Arguments.of(-5, -3, -8),
+                Arguments.of(10, 0, 10),
+                Arguments.of(0, 0, 0));
     }
+
     static Stream<Arguments> subtractionTestCases() {
         return Stream.of(
-            Arguments.of(5, 3, 2),
-            Arguments.of(-5, 10, -15),
-            Arguments.of(3, 5, -2),
-            Arguments.of(5, 0, 5),
-            Arguments.of(0, 0, 0)
-        );
+                Arguments.of(5, 3, 2),
+                Arguments.of(-5, 10, -15),
+                Arguments.of(3, 5, -2),
+                Arguments.of(5, 0, 5),
+                Arguments.of(0, 0, 0));
     }
+
     static Stream<Arguments> multiplicationTestCases() {
         return Stream.of(
-            Arguments.of(5, 3, 15),
-            Arguments.of(-5, 3, -15),
-            Arguments.of(-5, -3, 15),
-            Arguments.of(5, 0, 0),
-            Arguments.of(0, 0, 0)
-        );
+                Arguments.of(5, 3, 15),
+                Arguments.of(-5, 3, -15),
+                Arguments.of(-5, -3, 15),
+                Arguments.of(5, 0, 0),
+                Arguments.of(0, 0, 0));
     }
+
     static Stream<Arguments> divisionTestCases() {
         return Stream.of(
-            Arguments.of(6, 3, 2),
-            Arguments.of(7, 2, 3),
-            Arguments.of(-6, 3, -2),
-            Arguments.of(-6, -3, 2)
-        );
+                Arguments.of(6, 3, 2),
+                Arguments.of(7, 2, 3),
+                Arguments.of(-6, 3, -2),
+                Arguments.of(-6, -3, 2));
     }
 
     @ParameterizedTest
@@ -86,23 +85,21 @@ public class EchoCommandExecutorPositiveTest {
     @DisplayName("BC: Division with various numbers (Parameterized)")
     void testBcDivide(int a, int b, int expectedResult) throws IOException, InterruptedException {
         String expression = a + " / " + b;
-        assertEquals(String.format("%.4f", (double)a / b), echoCommandExecutor.executeEchoCommand(expression));
+        assertEquals(String.format("%.4f", (double) a / b), echoCommandExecutor.executeEchoCommand(expression));
     }
 
     @Test
     @DisplayName("BC: Large numbers - Limits and Overflow")
     void testBcLargeNumbers() throws IOException, InterruptedException {
-        // Why: To check bc's behavior with numbers near 64-bit integer limits
         String largeNum = "9223372036854775807";
         String result = echoCommandExecutor.executeEchoCommand(largeNum + " + 1");
         assertTrue(result.startsWith("922337203685477"),
-            "Result should start with '922337203685477', but was: " + result);
+                "Result should start with '922337203685477', but was: " + result);
     }
 
     @Test
     @DisplayName("BC: Floating-point numbers - Behavior")
     void testBcFloatingPointNumbers() throws IOException, InterruptedException {
-        // Why: To verify correct handling of floating-point addition
         String result = echoCommandExecutor.executeEchoCommand("5.5 + 3.2");
         assertEquals("8.7000", result);
     }
@@ -110,7 +107,6 @@ public class EchoCommandExecutorPositiveTest {
     @Test
     @DisplayName("BC: Very long valid expression - Limits")
     void testBcVeryLongValidExpression() throws IOException, InterruptedException {
-        // Why: To test bc's ability to handle very long expressions
         StringBuilder longExpressionBuilder = new StringBuilder("1");
         double expectedSum = 1;
         for (int i = 0; i < 1000; i++) {

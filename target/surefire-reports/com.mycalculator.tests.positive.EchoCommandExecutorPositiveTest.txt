@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.mycalculator.tests.positive.EchoCommandExecutorPositiveTest
 -------------------------------------------------------------------------------
-Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.435 s - in com.mycalculator.tests.positive.EchoCommandExecutorPositiveTest
+Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.219 s - in com.mycalculator.tests.positive.EchoCommandExecutorPositiveTest
